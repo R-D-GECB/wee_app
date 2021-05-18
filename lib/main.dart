@@ -2,8 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wee_app/data/archive_model.dart';
+import 'package:wee_app/data/default_model.dart';
 import 'package:wee_app/data/workspace_model.dart';
 import 'package:wee_app/views/about_us.dart';
+import 'package:wee_app/views/archive.dart';
+import 'package:wee_app/views/defaults.dart';
 import 'package:wee_app/views/form.dart';
 import 'package:wee_app/views/workspace.dart';
 import 'package:hive/hive.dart';
@@ -20,19 +24,40 @@ Future<void> main() async {
 class WEEApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => WorkspaceModal(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => WorkspaceModel()),
+        ChangeNotifierProvider(create: (context) => DefaultsModel()),
+        ChangeNotifierProvider(create: (context) => ArchiveModel()),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-            accentColor: Colors.green[600],
-            backgroundColor: Colors.grey[800],
-            primaryColor: Colors.grey[850],
-            primaryColorLight: Colors.grey[200]),
+          accentColor: Colors.green[600],
+          backgroundColor: Colors.grey[800],
+          primaryColor: Colors.grey[850],
+          primaryColorLight: Colors.grey[200],
+        ),
         routes: {
           '/': (context) => WorkspaceView(),
-          '/add': (context) => AddView(),
-          '/about': (context) => AboutView()
+          '/about': (context) => AboutView(),
+          '/defaults': (context) => DefaultView(),
+          '/archive': (context) => ArchiveView(),
+        },
+        onGenerateRoute: (settings) {
+          if (settings.name == '/edit') {
+            final args = settings.arguments;
+            return MaterialPageRoute(builder: (context) {
+              return FormView(data: args, editMode: true);
+            });
+          }
+          if (settings.name == '/add') {
+            final args = settings.arguments;
+            return MaterialPageRoute(builder: (context) {
+              return FormView(data: args);
+            });
+          }
+          return null;
         },
       ),
     );

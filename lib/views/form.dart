@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class AddView extends StatefulWidget {
-  const AddView({Key key}) : super(key: key);
+class FormView extends StatefulWidget {
+  final Map data;
+  final bool editMode;
+  const FormView({Key key, this.data, this.editMode = false}) : super(key: key);
   @override
-  _AddViewState createState() => _AddViewState();
+  _FormViewState createState() => _FormViewState();
 }
 
-class _AddViewState extends State<AddView> {
+class _FormViewState extends State<FormView> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController dateController = TextEditingController();
-  Map<String, String> data = {};
+  Map data;
+
+  @override
+  void initState() {
+    super.initState();
+    data = widget.data;
+    if (widget.editMode) {
+      dateController.value = TextEditingValue(text: widget.data['Date']);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +33,7 @@ class _AddViewState extends State<AddView> {
           SliverAppBar(
             floating: true,
             title: Text(
-              'Add entry',
+              widget.editMode ? 'Edit' : 'Add',
               style: TextStyle(
                 color: Theme.of(context).primaryColorLight,
                 fontWeight: FontWeight.bold,
@@ -49,7 +61,9 @@ class _AddViewState extends State<AddView> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         TextButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                           style: ButtonStyle(
                               foregroundColor: MaterialStateProperty.all(
                                   Theme.of(context).accentColor),
@@ -75,8 +89,9 @@ class _AddViewState extends State<AddView> {
                                   Theme.of(context).primaryColorLight),
                               padding: MaterialStateProperty.all(
                                   EdgeInsets.fromLTRB(8, 8, 20, 8))),
-                          icon: Icon(Icons.add),
-                          label: Text('Add'),
+                          icon: Icon(
+                              widget.editMode ? Icons.save_rounded : Icons.add),
+                          label: Text(widget.editMode ? "Save" : "Add"),
                         )
                       ],
                     ),
@@ -121,8 +136,13 @@ class _AddViewState extends State<AddView> {
                     );
                   });
               setState(() {
-                dateController.value = TextEditingValue(
-                    text: '${date.day}/${date.month}/${date.year}');
+                if (date != null) {
+                  String d = date.month < 10
+                      ? '${date.day}/0${date.month}/${date.year}'
+                      : '${date.day}/${date.month}/${date.year}';
+                  dateController.value = TextEditingValue(text: d);
+                  data['Date'] = d;
+                }
               });
             },
             child: Container(
@@ -190,7 +210,7 @@ class CustomField extends StatelessWidget {
   final bool emptyAllowed;
   final int maxLines;
   final bool enabled;
-  final Map<String, String> data;
+  final Map data;
   final TextEditingController controller;
   CustomField({
     Key key,

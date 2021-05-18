@@ -1,14 +1,13 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
-class WorkspaceModel extends ChangeNotifier {
+class ArchiveModel extends ChangeNotifier {
   Box box;
-  Timer timer;
+  Map temp;
+  String tempKey;
   Set<String> selected = {};
-  WorkspaceModel() {
-    Hive.openBox<Map>('workspace').then((value) {
+  ArchiveModel() {
+    Hive.openBox<Map>('archive').then((value) {
       box = value;
       notifyListeners();
     });
@@ -39,23 +38,6 @@ class WorkspaceModel extends ChangeNotifier {
     box.delete(int.parse(key));
     selected.remove(key);
     notifyListeners();
-  }
-
-  void trash(String key) {
-    if (timer != null) {
-      confirmDelete();
-    }
-    Map temp = valueOf(key);
-    delete(key);
-    timer = Timer(Duration(seconds: 4), () {
-      update(key, temp);
-      timer = null;
-    });
-  }
-
-  void confirmDelete() {
-    timer.cancel();
-    timer = null;
   }
 
   void update(String id, Map value) {
@@ -90,6 +72,7 @@ class WorkspaceModel extends ChangeNotifier {
     List.from(selected).forEach((element) {
       delete(element);
     });
+    selected.clear();
   }
 
   bool get alteastOneSelected {
