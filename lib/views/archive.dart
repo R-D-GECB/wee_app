@@ -123,6 +123,7 @@ class ArchiveList extends StatelessWidget {
                     color: Theme.of(context).primaryColorLight,
                     fontWeight: FontWeight.bold,
                     fontSize: 14),
+                showBottomBorder: true,
                 columns: [
                   DataColumn(label: Text(''), numeric: true),
                   DataColumn(
@@ -177,15 +178,4 @@ class ArchiveList extends StatelessWidget {
     });
     return out;
   }
-}
-
-class DataTile extends StatelessWidget {
-  const DataTile({
-    Key key,
-    @required this.id,
-  }) : super(key: key);
-
-  final String id;
-  @override
-  Widget build(BuildContext context) {}
 }

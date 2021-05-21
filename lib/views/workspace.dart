@@ -62,7 +62,12 @@ class WorkspaceView extends StatelessWidget {
             ),
             onPressed: Provider.of<WorkspaceModel>(context, listen: false)
                     .alteastOneSelected
-                ? () => print('Generate')
+                ? () {
+                    Navigator.of(context).pushNamed('/processing',
+                        arguments:
+                            Provider.of<WorkspaceModel>(context, listen: false)
+                                .selectedValues);
+                  }
                 : () async {
                     final response = await Navigator.of(context)
                         .pushNamed('/add', arguments: Map.from(defaults));
@@ -155,7 +160,8 @@ class WorkspaceList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List keys = Provider.of<WorkspaceModel>(context).keys;
-    return keys.isEmpty
+    bool archiveReady = Provider.of<ArchiveModel>(context).isReady;
+    return keys.isEmpty || !archiveReady
         ? SliverFillRemaining(
             hasScrollBody: false,
             child: Opacity(
@@ -238,7 +244,7 @@ class DataTile extends StatelessWidget {
           child: ListTile(
             onTap: () async {
               var response = await Navigator.of(context)
-                  .pushNamed('/edit', arguments: values);
+                  .pushNamed('/edit', arguments: Map.from(values));
               if (response != null) {
                 Provider.of<WorkspaceModel>(context, listen: false)
                     .update(id, response);
@@ -281,9 +287,7 @@ class AppDrawer extends StatelessWidget {
         child: Column(
           children: [
             DrawerHeader(
-              child: Container(
-                color: Theme.of(context).accentColor,
-              ),
+              child: Image.asset('assets/logo.png'),
             ),
             LinkTile(
               icon: Icons.archive_rounded,

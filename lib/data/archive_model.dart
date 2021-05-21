@@ -4,11 +4,13 @@ import 'package:hive/hive.dart';
 class ArchiveModel extends ChangeNotifier {
   Box box;
   Map temp;
+  bool isReady = false;
   String tempKey;
   Set<String> selected = {};
   ArchiveModel() {
     Hive.openBox<Map>('archive').then((value) {
       box = value;
+      isReady = true;
       notifyListeners();
     });
   }

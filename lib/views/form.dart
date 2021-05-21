@@ -114,7 +114,6 @@ class _FormViewState extends State<FormView> {
           CustomField(
             data: data,
             label: 'Locality & Pincode',
-            maxSize: 20,
           ),
           GestureDetector(
             onTap: () async {
@@ -156,6 +155,11 @@ class _FormViewState extends State<FormView> {
             ),
           ),
           CustomField(
+            label: 'Collection ID',
+            data: data,
+            maxSize: 20,
+          ),
+          CustomField(
             data: data,
             label: 'Scientific Name & Author',
             maxSize: 50,
@@ -163,39 +167,49 @@ class _FormViewState extends State<FormView> {
           CustomField(
             data: data,
             label: 'Family',
-            maxSize: 20,
+            maxSize: 30,
           ),
           CustomField(
             data: data,
             label: 'Notes \n\n',
             emptyAllowed: true,
-            maxSize: 100,
-            maxLines: 10,
+            maxSize: 500,
+            maxLines: 20,
           ),
           CustomField(
             data: data,
             label: 'Collected By',
-            maxSize: 20,
+            maxSize: 30,
+          ),
+          CustomField(label: 'Locality', data: data),
+          CustomField(
+            label: 'Coordinates',
+            data: data,
+            emptyAllowed: true,
           ),
           CustomField(
             data: data,
             label: 'Scientific Name with Citations',
-            maxSize: 50,
+            maxSize: 100,
           ),
           CustomField(
             data: data,
             label: 'Description \n\n',
             emptyAllowed: true,
-            maxSize: 100,
-            maxLines: 10,
+            maxSize: 500,
+            maxLines: 20,
           ),
           CustomField(label: 'Distribution ', data: data),
-          CustomField(label: 'Flowering & Fruiting', data: data),
+          CustomField(
+            label: 'Flowering & Fruiting',
+            data: data,
+            emptyAllowed: true,
+          ),
           CustomField(
             data: data,
             label: 'URL for Reference \n\n',
             emptyAllowed: true,
-            maxSize: 100,
+            maxSize: 200,
             maxLines: 10,
           ),
         ],

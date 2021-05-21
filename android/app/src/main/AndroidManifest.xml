@@ -1,8 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.wee_app">
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
    <application
-        android:label="wee_app"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Wee"
+        android:icon="@mipmap/wee_logo">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

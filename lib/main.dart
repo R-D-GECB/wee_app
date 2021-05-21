@@ -9,6 +9,8 @@ import 'package:wee_app/views/about_us.dart';
 import 'package:wee_app/views/archive.dart';
 import 'package:wee_app/views/defaults.dart';
 import 'package:wee_app/views/form.dart';
+import 'package:wee_app/views/preview.dart';
+import 'package:wee_app/views/processing.dart';
 import 'package:wee_app/views/workspace.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as pathProvider;
@@ -43,6 +45,8 @@ class WEEApp extends StatelessWidget {
           '/about': (context) => AboutView(),
           '/defaults': (context) => DefaultView(),
           '/archive': (context) => ArchiveView(),
+          '/processing': (context) => ProcessingView(),
+          '/preview': (context) => PreviewView(),
         },
         onGenerateRoute: (settings) {
           if (settings.name == '/edit') {

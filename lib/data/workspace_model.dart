@@ -95,4 +95,9 @@ class WorkspaceModel extends ChangeNotifier {
   bool get alteastOneSelected {
     return selected.isNotEmpty;
   }
+
+  List<Map> get selectedValues {
+    List s = List.from(selected);
+    return List<Map>.generate(selected.length, (index) => valueOf(s[index]));
+  }
 }

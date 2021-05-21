@@ -109,16 +109,13 @@ class _DefaultViewState extends State<DefaultView> {
             emptyAllowed: true,
           ),
           CustomField(
-              label: 'Locality & Pincode',
-              data: data,
-              maxSize: 20,
-              emptyAllowed: true),
+              label: 'Locality & Pincode', data: data, emptyAllowed: true),
           CustomField(
-              data: data, label: 'Family', maxSize: 20, emptyAllowed: true),
+              data: data, label: 'Family', maxSize: 30, emptyAllowed: true),
           CustomField(
               data: data,
               label: 'Collected By',
-              maxSize: 20,
+              maxSize: 30,
               emptyAllowed: true),
         ],
       ),
