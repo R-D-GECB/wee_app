@@ -3,11 +3,18 @@ import 'package:hive/hive.dart';
 
 class DefaultsModel extends ChangeNotifier {
   Box box;
+  bool label;
   DefaultsModel() {
     Hive.openBox<Map>('defaults').then((value) {
       box = value;
+      label = box.get(1)['label'] == null ? false : box.get(1)['label'];
       notifyListeners();
     });
+  }
+  set labelNeeded(bool b) {
+    label = b;
+    box.put(1, {'label': b});
+    notifyListeners();
   }
 
   Map get data {

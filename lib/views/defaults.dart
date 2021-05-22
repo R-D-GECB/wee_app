@@ -117,8 +117,31 @@ class _DefaultViewState extends State<DefaultView> {
               label: 'Collected By',
               maxSize: 30,
               emptyAllowed: true),
+          LabelSwitch()
         ],
       ),
+    );
+  }
+}
+
+class LabelSwitch extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'Color Label: ',
+          style: TextStyle(
+              color: Theme.of(context).primaryColorLight, fontSize: 16),
+        ),
+        Switch(
+            value: Provider.of<DefaultsModel>(context).label,
+            onChanged: (b) {
+              Provider.of<DefaultsModel>(context, listen: false).labelNeeded =
+                  b;
+            }),
+      ],
     );
   }
 }
