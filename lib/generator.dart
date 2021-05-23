@@ -20,8 +20,10 @@ Future<String> generate(List<Map> values, bool label) async {
     start += perPage;
     end += perPage;
   }
-  pdf.addPage(await makePage(
-      values.getRange(values.length - lastPage, values.length), label));
+  if (lastPage != 0) {
+    pdf.addPage(await makePage(
+        values.getRange(values.length - lastPage, values.length), label));
+  }
 
   final output = await getTemporaryDirectory();
   final String path = "${output.path}/generated_file.pdf";
