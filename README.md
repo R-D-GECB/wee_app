@@ -6,6 +6,7 @@ It is aimed to generate ready to print pdf files for the herbarium information l
 # Technology
 
 This project is entirely built with flutter and uses Hive DB as a data storage solution.
+Currently the software is only targeted for Android platform. Web and ios builds are not tested.
 
 # Contact US
 
