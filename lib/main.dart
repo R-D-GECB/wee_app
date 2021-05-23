@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:wee_app/data/archive_model.dart';
 import 'package:wee_app/data/default_model.dart';
 import 'package:wee_app/data/workspace_model.dart';
-import 'package:wee_app/views/about_us.dart';
+import 'package:wee_app/views/about.dart';
 import 'package:wee_app/views/archive.dart';
 import 'package:wee_app/views/defaults.dart';
 import 'package:wee_app/views/form.dart';
