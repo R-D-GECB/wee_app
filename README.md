@@ -1,16 +1,16 @@
-# wee_app
+# Wee - Genarator
 
-A new Flutter project.
+Wee is a Mini Herbarium designed by Catholicate College Pathanamthitta. This app is developed as per their request by R&D GECB.
+It is aimed to generate ready to print pdf files for the herbarium information labels. Apart from serving the main function, it also features a data management system to store and reuse the label information.
 
-## Getting Started
+# Technology
 
-This project is a starting point for a Flutter application.
+This project is entirely built with flutter and uses Hive DB as a data storage solution.
 
-A few resources to get you started if this is your first Flutter project:
+# Contact US
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+For similar projects or any queries feel free to reach out to us
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [Email](mailto:randdgecb@gmail.com)
+- [Website](http://www.gecbh.ac.in/)
+- [LinkedIn](https://www.linkedin.com/company/r-d-gecbh)

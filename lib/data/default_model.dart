@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 
 class DefaultsModel extends ChangeNotifier {
   Box box;
-  bool label;
+  bool label = false;
   DefaultsModel() {
     Hive.openBox<Map>('defaults').then((value) {
       box = value;
