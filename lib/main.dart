@@ -8,6 +8,7 @@ import 'package:wee_app/data/workspace_model.dart';
 import 'package:wee_app/views/about.dart';
 import 'package:wee_app/views/archive.dart';
 import 'package:wee_app/views/defaults.dart';
+import 'package:wee_app/views/faq.dart';
 import 'package:wee_app/views/form.dart';
 import 'package:wee_app/views/preview.dart';
 import 'package:wee_app/views/processing.dart';
@@ -47,6 +48,7 @@ class WEEApp extends StatelessWidget {
           '/archive': (context) => ArchiveView(),
           '/processing': (context) => ProcessingView(),
           '/preview': (context) => PreviewView(),
+          '/faq': (context) => FaqView(),
         },
         onGenerateRoute: (settings) {
           if (settings.name == '/edit') {

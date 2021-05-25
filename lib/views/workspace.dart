@@ -377,6 +377,11 @@ class AppDrawer extends StatelessWidget {
               route: '/defaults',
             ),
             LinkTile(
+              icon: Icons.help,
+              name: 'FAQ',
+              route: '/faq',
+            ),
+            LinkTile(
               icon: Icons.info,
               name: 'About',
               route: '/about',
