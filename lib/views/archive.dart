@@ -44,13 +44,68 @@ class ArchiveView extends StatelessWidget {
                     secondChild: Row(
                       children: [
                         IconButton(
-                          icon: Icon(Icons.delete_outline),
-                          color: Colors.red,
-                          onPressed: () {
-                            Provider.of<ArchiveModel>(context, listen: false)
-                                .deleteSelected();
-                          },
-                        ),
+                            icon: Icon(Icons.delete_outline),
+                            color: Colors.red,
+                            onPressed: () async {
+                              await showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                            title: Text('Confirm Delete'),
+                                            backgroundColor: Theme.of(context)
+                                                .backgroundColor,
+                                            titleTextStyle: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColorLight,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20),
+                                            contentTextStyle: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColorLight,
+                                                fontSize: 16),
+                                            content: Text(
+                                                'Do you really want to delete ${Provider.of<ArchiveModel>(context, listen: false).selected.length} Items(s) ?'),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          context, false),
+                                                  style: ButtonStyle(
+                                                      foregroundColor:
+                                                          MaterialStateProperty.all(
+                                                              Theme.of(context)
+                                                                  .accentColor),
+                                                      overlayColor:
+                                                          MaterialStateProperty
+                                                              .all(Theme.of(
+                                                                      context)
+                                                                  .accentColor
+                                                                  .withOpacity(
+                                                                      0.5))),
+                                                  child: Text('Cancel')),
+                                              TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          context, true),
+                                                  style: ButtonStyle(
+                                                      foregroundColor:
+                                                          MaterialStateProperty.all(
+                                                              Theme.of(context)
+                                                                  .accentColor),
+                                                      overlayColor:
+                                                          MaterialStateProperty
+                                                              .all(Theme.of(
+                                                                      context)
+                                                                  .accentColor
+                                                                  .withOpacity(
+                                                                      0.5))),
+                                                  child: Text('Confirm')),
+                                            ],
+                                          ))
+                                  ? Provider.of<ArchiveModel>(context,
+                                          listen: false)
+                                      .deleteSelected()
+                                  : print('Cancelled');
+                            }),
                         IconButton(
                           icon: Icon(Icons.unarchive_outlined),
                           color: Colors.yellow,

@@ -7,22 +7,25 @@ import 'package:pdf/widgets.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 MemoryImage labelImage;
-Future<String> generate(List<Map> values, bool label) async {
+Future<String> generate(List<Map> values, bool label, Function callback) async {
   Document pdf = Document();
   int perPage = 4;
+  callback = callback;
   int numberOfPages = values.length ~/ perPage;
   int lastPage = values.length % perPage;
   labelImage = MemoryImage(
     (await rootBundle.load('assets/wee_label.jpg')).buffer.asUint8List(),
   );
   for (var i = 0, start = 0, end = perPage; i < numberOfPages; i++) {
-    pdf.addPage(await makePage(values.getRange(start, end), label));
+    pdf.addPage(await makePage(values.getRange(start, end), label, callback));
     start += perPage;
     end += perPage;
   }
   if (lastPage != 0) {
     pdf.addPage(await makePage(
-        values.getRange(values.length - lastPage, values.length), label));
+        values.getRange(values.length - lastPage, values.length),
+        label,
+        callback));
   }
 
   final output = await getTemporaryDirectory();
@@ -32,22 +35,20 @@ Future<String> generate(List<Map> values, bool label) async {
   return path;
 }
 
-Future<Page> makePage(Iterable<Map> values, label) async {
+Future<Page> makePage(Iterable<Map> values, bool label, callback) async {
   List valuesList = values.toList();
-  List qrCodes = await makeQrcodes(valuesList);
+  List qrCodes = await makeQrcodes(valuesList, callback);
   return Page(
       theme: ThemeData(defaultTextStyle: TextStyle(font: Font.times())),
       margin: EdgeInsets.all(0),
       pageFormat: PdfPageFormat.a4,
       build: (context) {
-        return Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: List.generate(
-                    values.length,
-                    (index) =>
-                        itemBlock(valuesList[index], label, qrCodes[index]))));
+        return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: List.generate(values.length, (index) {
+              return itemBlock(valuesList[index], label, qrCodes[index]);
+            }));
       });
 }
 
@@ -168,10 +169,11 @@ Container mainLabelBlock(value) {
   );
 }
 
-Future<List> makeQrcodes(List values) async {
+Future<List> makeQrcodes(List values, callback) async {
   var out = [];
   for (var value in values) {
     out.add(await makeQr(value));
+    callback();
   }
 
   return out;

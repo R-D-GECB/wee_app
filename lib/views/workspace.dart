@@ -8,28 +8,6 @@ class WorkspaceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map defaults = Provider.of<DefaultsModel>(context).data;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (Provider.of<WorkspaceModel>(context, listen: false).timer != null) {
-        ScaffoldMessenger.of(context).removeCurrentSnackBar();
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(
-              content: Text('Press Undo to Cancel'),
-              duration: Duration(seconds: 3),
-              action: SnackBarAction(
-                  label: 'Undo',
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  }),
-            ))
-            .closed
-            .then((value) {
-          if (value == SnackBarClosedReason.timeout ||
-              value == SnackBarClosedReason.swipe) {
-            Provider.of<WorkspaceModel>(context, listen: false).confirmDelete();
-          }
-        });
-      }
-    });
     return Scaffold(
         drawer: AppDrawer(),
         floatingActionButtonLocation:
@@ -118,9 +96,65 @@ class WorkspaceView extends StatelessWidget {
                         IconButton(
                           icon: Icon(Icons.delete_outline),
                           color: Colors.red,
-                          onPressed: () {
-                            Provider.of<WorkspaceModel>(context, listen: false)
-                                .deleteSelected();
+                          onPressed: () async {
+                            await showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                          title: Text('Confirm Delete'),
+                                          backgroundColor:
+                                              Theme.of(context).backgroundColor,
+                                          titleTextStyle: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColorLight,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20),
+                                          contentTextStyle: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColorLight,
+                                              fontSize: 16),
+                                          content: Text(
+                                              'Do you really want to delete ${Provider.of<WorkspaceModel>(context, listen: false).selected.length} Items(s) ?'),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    context, false),
+                                                style: ButtonStyle(
+                                                    foregroundColor:
+                                                        MaterialStateProperty
+                                                            .all(Theme.of(
+                                                                    context)
+                                                                .accentColor),
+                                                    overlayColor:
+                                                        MaterialStateProperty
+                                                            .all(Theme.of(
+                                                                    context)
+                                                                .accentColor
+                                                                .withOpacity(
+                                                                    0.5))),
+                                                child: Text('Cancel')),
+                                            TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    context, true),
+                                                style: ButtonStyle(
+                                                    foregroundColor:
+                                                        MaterialStateProperty
+                                                            .all(Theme.of(
+                                                                    context)
+                                                                .accentColor),
+                                                    overlayColor:
+                                                        MaterialStateProperty
+                                                            .all(Theme.of(
+                                                                    context)
+                                                                .accentColor
+                                                                .withOpacity(
+                                                                    0.5))),
+                                                child: Text('Confirm')),
+                                          ],
+                                        ))
+                                ? Provider.of<WorkspaceModel>(context,
+                                        listen: false)
+                                    .deleteSelected()
+                                : print('Cancelled');
                           },
                         ),
                         IconButton(
@@ -227,9 +261,52 @@ class DataTile extends StatelessWidget {
           size: 30,
         ),
       ),
+      confirmDismiss: (direction) async {
+        if (direction == DismissDirection.endToStart) {
+          return await showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    title: Text('Confirm Delete'),
+                    backgroundColor: Theme.of(context).backgroundColor,
+                    titleTextStyle: TextStyle(
+                        color: Theme.of(context).primaryColorLight,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                    contentTextStyle: TextStyle(
+                        color: Theme.of(context).primaryColorLight,
+                        fontSize: 16),
+                    content: Text(
+                        'Do you really want to delete "${values['Scientific Name & Author']}" ?'),
+                    actions: [
+                      TextButton(
+                          onPressed: () => Navigator.pop(context, false),
+                          style: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all(
+                                  Theme.of(context).accentColor),
+                              overlayColor: MaterialStateProperty.all(
+                                  Theme.of(context)
+                                      .accentColor
+                                      .withOpacity(0.5))),
+                          child: Text('Cancel')),
+                      TextButton(
+                          onPressed: () => Navigator.pop(context, true),
+                          style: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all(
+                                  Theme.of(context).accentColor),
+                              overlayColor: MaterialStateProperty.all(
+                                  Theme.of(context)
+                                      .accentColor
+                                      .withOpacity(0.5))),
+                          child: Text('Confirm')),
+                    ],
+                  ));
+        } else {
+          return true;
+        }
+      },
       onDismissed: (direction) {
         if (direction == DismissDirection.endToStart) {
-          Provider.of<WorkspaceModel>(context, listen: false).trash(id);
+          Provider.of<WorkspaceModel>(context, listen: false).delete(id);
         } else {
           Provider.of<ArchiveModel>(context, listen: false).add(
               Provider.of<WorkspaceModel>(context, listen: false)

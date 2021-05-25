@@ -5,7 +5,6 @@ import 'package:hive/hive.dart';
 
 class WorkspaceModel extends ChangeNotifier {
   Box box;
-  Timer timer;
   Set<String> selected = {};
   WorkspaceModel() {
     Hive.openBox<Map>('workspace').then((value) {
@@ -39,23 +38,6 @@ class WorkspaceModel extends ChangeNotifier {
     box.delete(int.parse(key));
     selected.remove(key);
     notifyListeners();
-  }
-
-  void trash(String key) {
-    if (timer != null) {
-      confirmDelete();
-    }
-    Map temp = valueOf(key);
-    delete(key);
-    timer = Timer(Duration(seconds: 4), () {
-      update(key, temp);
-      timer = null;
-    });
-  }
-
-  void confirmDelete() {
-    timer.cancel();
-    timer = null;
   }
 
   void update(String id, Map value) {
