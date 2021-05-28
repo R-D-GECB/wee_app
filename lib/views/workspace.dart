@@ -342,7 +342,7 @@ class DataTile extends StatelessWidget {
                   color: Theme.of(context).primaryColorLight,
                 )),
             title: Text(
-              values['Scientific Name & Author'],
+              values['Scientific Name'],
               style: TextStyle(
                   color: Theme.of(context).primaryColorLight,
                   fontStyle: FontStyle.italic),
@@ -361,32 +361,34 @@ class AppDrawer extends StatelessWidget {
     return Drawer(
       child: Container(
         color: Theme.of(context).backgroundColor,
-        child: Column(
-          children: [
-            DrawerHeader(
-              child: Image.asset('assets/logo.png'),
-            ),
-            LinkTile(
-              icon: Icons.archive_rounded,
-              name: 'Archive',
-              route: '/archive',
-            ),
-            LinkTile(
-              icon: Icons.assignment,
-              name: 'Defaults',
-              route: '/defaults',
-            ),
-            LinkTile(
-              icon: Icons.help,
-              name: 'FAQ',
-              route: '/faq',
-            ),
-            LinkTile(
-              icon: Icons.info,
-              name: 'About',
-              route: '/about',
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              DrawerHeader(
+                child: Image.asset('assets/logo.png'),
+              ),
+              LinkTile(
+                icon: Icons.archive_rounded,
+                name: 'Archive',
+                route: '/archive',
+              ),
+              LinkTile(
+                icon: Icons.assignment,
+                name: 'Defaults',
+                route: '/defaults',
+              ),
+              LinkTile(
+                icon: Icons.help,
+                name: 'FAQ',
+                route: '/faq',
+              ),
+              LinkTile(
+                icon: Icons.info,
+                name: 'About',
+                route: '/about',
+              ),
+            ],
+          ),
         ),
       ),
     );

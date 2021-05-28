@@ -9,7 +9,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 MemoryImage labelImage;
 Future<String> generate(List<Map> values, bool label, Function callback) async {
   Document pdf = Document();
-  int perPage = 4;
+  int perPage = 3;
   callback = callback;
   int numberOfPages = values.length ~/ perPage;
   int lastPage = values.length % perPage;
@@ -40,7 +40,7 @@ Future<Page> makePage(Iterable<Map> values, bool label, callback) async {
   List qrCodes = await makeQrcodes(valuesList, callback);
   return Page(
       theme: ThemeData(defaultTextStyle: TextStyle(font: Font.times())),
-      margin: EdgeInsets.all(0),
+      margin: EdgeInsets.only(top: 90),
       pageFormat: PdfPageFormat.a4,
       build: (context) {
         return Column(
@@ -59,20 +59,20 @@ Widget itemBlock(Map value, label, List qrCodes) {
       Row(children: [
         Container(
           margin: EdgeInsets.all(PdfPageFormat.cm * 0.1),
-          height: PdfPageFormat.cm * 2,
-          width: PdfPageFormat.cm * 2,
+          height: PdfPageFormat.cm * 2.5,
+          width: PdfPageFormat.cm * 2.5,
           child: Image(qrCodes[0]),
         ),
         Container(
           margin: EdgeInsets.all(PdfPageFormat.cm * 0.1),
-          height: PdfPageFormat.cm * 2,
-          width: PdfPageFormat.cm * 2,
+          height: PdfPageFormat.cm * 2.5,
+          width: PdfPageFormat.cm * 2.5,
           child: Image(qrCodes[1]),
         ),
         Container(
           margin: EdgeInsets.all(PdfPageFormat.cm * 0.1),
-          height: PdfPageFormat.cm * 2,
-          width: PdfPageFormat.cm * 2,
+          height: PdfPageFormat.cm * 2.5,
+          width: PdfPageFormat.cm * 2.5,
           child: Image(qrCodes[0]),
         ),
       ]),
@@ -80,18 +80,13 @@ Widget itemBlock(Map value, label, List qrCodes) {
       label
           ? Container(
               child: Image(labelImage,
-                  height: PdfPageFormat.cm * 2.3,
-                  width: PdfPageFormat.cm * 10.5))
+                  height: PdfPageFormat.cm * 3, width: PdfPageFormat.cm * 10.5))
           : Container()
     ]),
   ]);
 }
 
 Container outerLabelBlock(value) {
-  List<String> words = value['Scientific Name & Author'].split(' ');
-  String nameOne = words[0];
-  String nameTwo = words.length > 1 ? words[1] : '';
-  String rest = words.length > 2 ? words.skip(2).join(" ") : '';
   return Container(
       margin: EdgeInsets.all(PdfPageFormat.cm * 0.1),
       height: PdfPageFormat.cm * 2,
@@ -100,21 +95,27 @@ Container outerLabelBlock(value) {
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         RichText(
+            textAlign: TextAlign.center,
             text: TextSpan(children: <TextSpan>[
-          TextSpan(
-              text: '$nameOne $nameTwo ',
-              style: TextStyle(font: Font.timesBoldItalic())),
-          TextSpan(text: rest, style: TextStyle(font: Font.times())),
-        ])),
+              TextSpan(
+                  text: '${value['Scientific Name']} ',
+                  style: TextStyle(font: Font.timesBoldItalic())),
+              TextSpan(
+                  text:
+                      '${value['Author citation'] ?? ''} ${value['Infraspecific category'] ?? ''} ',
+                  style: TextStyle(font: Font.times())),
+              TextSpan(
+                  text: '${value['Epithet']} ',
+                  style: TextStyle(font: Font.timesBoldItalic())),
+              TextSpan(
+                  text: '${value['Author'] ?? ''} ',
+                  style: TextStyle(font: Font.times())),
+            ])),
         Text(value['Family'].toUpperCase())
       ]));
 }
 
 Container mainLabelBlock(value) {
-  List<String> words = value['Scientific Name & Author'].split(' ');
-  String nameOne = words[0];
-  String nameTwo = words.length > 1 ? words[1] : '';
-  String rest = words.length > 2 ? words.skip(2).join(" ") : '';
   return Container(
     margin: EdgeInsets.all(PdfPageFormat.cm * 0.1),
     height: PdfPageFormat.cm * 7,
@@ -145,15 +146,24 @@ Container mainLabelBlock(value) {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Date: ${value['Date']}'),
-                  Text('Collection No: ${value['Collection ID']}'),
+                  Text('Collection No: ${value['Collection Number']}'),
                 ])),
         RichText(
             text: TextSpan(children: <TextSpan>[
-          TextSpan(text: 'Scientific Name: '),
           TextSpan(
-              text: '$nameOne $nameTwo ',
+              text: 'Scentific Name: ', style: TextStyle(font: Font.times())),
+          TextSpan(
+              text: '${value['Scientific Name']} ',
               style: TextStyle(font: Font.timesBoldItalic())),
-          TextSpan(text: rest, style: TextStyle(font: Font.times())),
+          TextSpan(
+              text:
+                  '${value['Author citation'] ?? ''} ${value['Infraspecific category'] ?? ''} ',
+              style: TextStyle(font: Font.times())),
+          TextSpan(
+              text: '${value['Epithet'] ?? ''} ',
+              style: TextStyle(font: Font.timesBoldItalic())),
+          TextSpan(
+              text: '${value['Author']}', style: TextStyle(font: Font.times())),
         ])),
         Text("Family: ${value['Family'].toUpperCase()}"),
         value['Notes \n\n'] == null
@@ -184,14 +194,15 @@ Future<List> makeQr(value) async {
 Organization: ${value['Organization'].toUpperCase()}
 Place: ${value['Locality & Pincode']}
 Date: ${value['Date']}
-Collection ID: ${value['Collection ID']}
-Scientific Name: ${value['Scientific Name & Author']}
+Collection Number: ${value['Collection Number']}
+Scientific Name: ${value['Scientific Name']} ${value['Author citation'] ?? ''} ${value['Infraspecific category'] ?? ''} ${value['Epithet'] ?? ''} ${value['Author']}
 Family: ${value['Family'].toUpperCase()}${value['Notes \n\n'] == null ? '' : '\nNotes: ${value['Notes \n\n']}'}
 Collected By: ${value['Collected By']}
 Locality: ${value['Locality']}${value['Coordinates'] == null ? '' : '\nGPS: ${value['Coordinates']}'} 
 ''';
   String content2 = '''
-Scientific Name: ${value['Scientific Name with Citations']}
+']}
+Scientific Name: ${value['Scientific Name']} ${value['Author citation'] ?? ''} ${value['Infraspecific category'] ?? ''} ${value['Epithet'] ?? ''} ${value['Author']}
 Distribution: ${value['Distribution ']}
   ''';
   if (value['Flowering & Fruiting'] != null) {
@@ -203,7 +214,8 @@ Distribution: ${value['Distribution ']}
   if (value['URL for Reference \n\n'] != null) {
     content2 += '\nURL for Reference: ${value['URL for Reference \n\n']}';
   }
-
+  print(content1);
+  print(content2);
   return [
     MemoryImage((await QrPainter(data: content1, version: QrVersions.auto)
             .toImageData(2048, format: ImageByteFormat.png))

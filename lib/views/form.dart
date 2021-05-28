@@ -110,7 +110,7 @@ class _FormViewState extends State<FormView> {
       key: _formKey,
       child: Column(
         children: [
-          CustomField(label: 'Organization', data: data),
+          CustomField(label: 'Organization', data: data, maxSize: 50),
           CustomField(
             data: data,
             label: 'Locality & Pincode',
@@ -155,15 +155,20 @@ class _FormViewState extends State<FormView> {
             ),
           ),
           CustomField(
-            label: 'Collection ID',
+            label: 'Collection Number',
             data: data,
             maxSize: 20,
           ),
           CustomField(
             data: data,
-            label: 'Scientific Name & Author',
+            label: 'Scientific Name',
             maxSize: 50,
           ),
+          CustomField(label: 'Author citation', data: data, emptyAllowed: true),
+          CustomField(
+              label: 'Infraspecific category', data: data, emptyAllowed: true),
+          CustomField(label: 'Epithet', data: data, emptyAllowed: true),
+          CustomField(label: 'Author', data: data),
           CustomField(
             data: data,
             label: 'Family',
@@ -173,7 +178,7 @@ class _FormViewState extends State<FormView> {
             data: data,
             label: 'Notes \n\n',
             emptyAllowed: true,
-            maxSize: 500,
+            maxSize: 300,
             maxLines: 20,
           ),
           CustomField(
@@ -189,17 +194,12 @@ class _FormViewState extends State<FormView> {
           ),
           CustomField(
             data: data,
-            label: 'Scientific Name with Citations',
-            maxSize: 100,
-          ),
-          CustomField(
-            data: data,
             label: 'Description \n\n',
             emptyAllowed: true,
-            maxSize: 500,
+            maxSize: 300,
             maxLines: 20,
           ),
-          CustomField(label: 'Distribution ', data: data),
+          CustomField(label: 'Distribution ', data: data, emptyAllowed: true),
           CustomField(
             label: 'Flowering & Fruiting',
             data: data,
