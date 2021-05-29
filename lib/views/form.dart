@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:wee_app/data/note_modal.dart';
 
 class FormView extends StatefulWidget {
   final Map data;
@@ -27,80 +29,127 @@ class _FormViewState extends State<FormView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      body: CustomScrollView(
-        physics: BouncingScrollPhysics(),
-        slivers: [
-          SliverAppBar(
-            floating: true,
-            title: Text(
-              widget.editMode ? 'Edit' : 'Add',
-              style: TextStyle(
-                color: Theme.of(context).primaryColorLight,
-                fontWeight: FontWeight.bold,
-                fontSize: 30.0,
-                letterSpacing: 2.0,
-              ),
-            ),
-            centerTitle: true,
-            backgroundColor: Theme.of(context).backgroundColor,
-          ),
-          SliverList(
-              delegate: SliverChildListDelegate([
-            Container(
-              padding: EdgeInsets.symmetric(
-                vertical: 25.0,
-                horizontal: 15.0,
-              ),
-              child: SingleChildScrollView(
-                  child: Column(
-                children: [
-                  _buildForm(),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        TextButton.icon(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          style: ButtonStyle(
-                              foregroundColor: MaterialStateProperty.all(
-                                  Theme.of(context).accentColor),
-                              overlayColor:
-                                  MaterialStateProperty.all(Colors.red),
-                              padding: MaterialStateProperty.all(
-                                  EdgeInsets.symmetric(
-                                      vertical: 8, horizontal: 3))),
-                          icon: Icon(Icons.close),
-                          label: Text('Cancel'),
-                        ),
-                        TextButton.icon(
-                          onPressed: () {
-                            if (_formKey.currentState.validate())
-                              Navigator.pop(context, data);
-                          },
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                  Theme.of(context).accentColor),
-                              foregroundColor: MaterialStateProperty.all(
-                                  Theme.of(context).backgroundColor),
-                              overlayColor: MaterialStateProperty.all(
-                                  Theme.of(context).primaryColorLight),
-                              padding: MaterialStateProperty.all(
-                                  EdgeInsets.fromLTRB(8, 8, 20, 8))),
-                          icon: Icon(
-                              widget.editMode ? Icons.save_rounded : Icons.add),
-                          label: Text(widget.editMode ? "Save" : "Add"),
-                        )
-                      ],
+      body: GestureDetector(
+        onDoubleTap: () => showModalBottomSheet(
+            backgroundColor: Colors.transparent,
+            context: context,
+            builder: (context) => FractionallySizedBox(
+                  heightFactor: 0.7,
+                  child: Container(
+                    child: SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'Notes',
+                              style: TextStyle(
+                                fontSize: 30.0,
+                                color: Theme.of(context).primaryColorLight,
+                              ),
+                            ),
+                          ),
+                          Divider(
+                            color: Theme.of(context).accentColor,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: SelectableText(
+                              Provider.of<NotesModel>(context, listen: false)
+                                  .content,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Theme.of(context).primaryColorLight,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  )
-                ],
-              )),
-            )
-          ]))
-        ],
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).backgroundColor,
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(20))),
+                  ),
+                )),
+        child: CustomScrollView(
+          physics: BouncingScrollPhysics(),
+          slivers: [
+            SliverAppBar(
+              floating: true,
+              title: Text(
+                widget.editMode ? 'Edit' : 'Add',
+                style: TextStyle(
+                  color: Theme.of(context).primaryColorLight,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30.0,
+                  letterSpacing: 2.0,
+                ),
+              ),
+              centerTitle: true,
+              backgroundColor: Theme.of(context).backgroundColor,
+            ),
+            SliverList(
+                delegate: SliverChildListDelegate([
+              Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: 25.0,
+                  horizontal: 15.0,
+                ),
+                child: SingleChildScrollView(
+                    child: Column(
+                  children: [
+                    _buildForm(),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          TextButton.icon(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            style: ButtonStyle(
+                                foregroundColor: MaterialStateProperty.all(
+                                    Theme.of(context).accentColor),
+                                overlayColor:
+                                    MaterialStateProperty.all(Colors.red),
+                                padding: MaterialStateProperty.all(
+                                    EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 3))),
+                            icon: Icon(Icons.close),
+                            label: Text('Cancel'),
+                          ),
+                          TextButton.icon(
+                            onPressed: () {
+                              if (_formKey.currentState.validate())
+                                Navigator.pop(context, data);
+                            },
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Theme.of(context).accentColor),
+                                foregroundColor: MaterialStateProperty.all(
+                                    Theme.of(context).backgroundColor),
+                                overlayColor: MaterialStateProperty.all(
+                                    Theme.of(context).primaryColorLight),
+                                padding: MaterialStateProperty.all(
+                                    EdgeInsets.fromLTRB(8, 8, 20, 8))),
+                            icon: Icon(widget.editMode
+                                ? Icons.save_rounded
+                                : Icons.add),
+                            label: Text(widget.editMode ? "Save" : "Add"),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                )),
+              )
+            ]))
+          ],
+        ),
       ),
     );
   }
