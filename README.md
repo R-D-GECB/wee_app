@@ -1,6 +1,6 @@
 # Wee - Genarator
 
-Wee is a Mini Herbarium designed by Catholicate College Pathanamthitta. This app is developed as per their request by R&D GECB.
+Wee is a Mini Herbarium designed by Catholicate College Pathanamthitta. This app is developed as per their request by R&D GECBH.
 It is aimed to generate ready to print pdf files for the herbarium information labels. Apart from serving the main function, it also features a data management system to store and reuse the label information.
 
 # Technology
