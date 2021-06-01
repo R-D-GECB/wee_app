@@ -22,7 +22,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Directory directory = await pathProvider.getApplicationDocumentsDirectory();
   Hive.init(directory.path);
-
   runApp(WEEApp());
 }
 

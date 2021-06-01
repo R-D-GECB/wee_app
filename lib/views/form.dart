@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:wee_app/data/note_modal.dart';
+import 'package:wee_app/image_picker.dart';
 
 class FormView extends StatefulWidget {
   final Map data;
@@ -50,8 +53,8 @@ class _FormViewState extends State<FormView> {
                               ),
                             ),
                           ),
-                          Divider(
-                            color: Theme.of(context).accentColor,
+                          SizedBox(
+                            height: 20,
                           ),
                           Padding(
                             padding: const EdgeInsets.all(20.0),
@@ -67,7 +70,6 @@ class _FormViewState extends State<FormView> {
                         ],
                       ),
                     ),
-                    margin: EdgeInsets.symmetric(horizontal: 20),
                     decoration: BoxDecoration(
                         color: Theme.of(context).backgroundColor,
                         borderRadius:
@@ -124,8 +126,9 @@ class _FormViewState extends State<FormView> {
                           ),
                           TextButton.icon(
                             onPressed: () {
-                              if (_formKey.currentState.validate())
+                              if (_formKey.currentState.validate()) {
                                 Navigator.pop(context, data);
+                              }
                             },
                             style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(
@@ -261,6 +264,7 @@ class _FormViewState extends State<FormView> {
             maxSize: 200,
             maxLines: 10,
           ),
+          ImageInput(data)
         ],
       ),
     );
@@ -329,6 +333,69 @@ class CustomField extends StatelessWidget {
             borderRadius: BorderRadius.circular(5.0),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ImageInput extends StatefulWidget {
+  final Map data;
+  ImageInput(this.data);
+  @override
+  _ImageInputState createState() => _ImageInputState();
+}
+
+class _ImageInputState extends State<ImageInput> {
+  String productImagePath;
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () async {
+        final result = await Navigator.push(
+            context, MaterialPageRoute(builder: (context) => ImagePicker()));
+        setState(() {
+          // ignore: unnecessary_statements
+          result == null ? null : productImagePath = result;
+          widget.data['image'] = productImagePath;
+        });
+      },
+      child: Container(
+        height: 200,
+        width: 200,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Color.fromRGBO(100, 100, 100, 0.5),
+        ),
+        child: productImagePath == null
+            ? Icon(
+                Icons.add_a_photo,
+                color: Colors.white,
+              )
+            : ClipRRect(
+                child: Stack(children: [
+                  Image.file(File(productImagePath)),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: CircleAvatar(
+                      backgroundColor: Color.fromARGB(150, 100, 100, 100),
+                      maxRadius: 15,
+                      child: IconButton(
+                        color: Colors.white,
+                        iconSize: 15,
+                        splashColor: Colors.red,
+                        icon: Icon(Icons.close),
+                        onPressed: () {
+                          setState(() {
+                            productImagePath = null;
+                            widget.data['image'] = null;
+                          });
+                        },
+                      ),
+                    ),
+                  )
+                ]),
+                borderRadius: BorderRadius.circular(10),
+              ),
       ),
     );
   }
