@@ -182,7 +182,7 @@ class ArchiveList extends StatelessWidget {
                 columns: [
                   DataColumn(label: Text(''), numeric: true),
                   DataColumn(
-                      label: Text('Scientific Name & Author'),
+                      label: Text('Scientific Name'),
                       onSort: (i, j) {
                         print('$i $j');
                       }),
@@ -225,7 +225,7 @@ class ArchiveList extends StatelessWidget {
                   : Icons.check_box_outline_blank_rounded,
               color: Theme.of(context).primaryColorLight,
             )),
-            DataCell(Text(values['Scientific Name & Author'])),
+            DataCell(Text(values['Scientific Name'])),
             DataCell(Text(values['Family'])),
             DataCell(Text(values['Collected By'])),
             DataCell(Text(values['Date'])),

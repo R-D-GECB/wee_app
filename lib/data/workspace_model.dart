@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
@@ -32,7 +34,14 @@ class WorkspaceModel extends ChangeNotifier {
     return response;
   }
 
-  void delete(String key) {
+  void delete(String key, {bool images = false}) {
+    if (images) {
+      final data = valueOf(key);
+      if (data['images'] != null) {
+        data['images'].forEach((e) => File(e).delete());
+      }
+    }
+
     box.delete(int.parse(key));
     selected.remove(key);
     notifyListeners();
@@ -68,7 +77,7 @@ class WorkspaceModel extends ChangeNotifier {
 
   void deleteSelected() {
     List.from(selected).forEach((element) {
-      delete(element);
+      delete(element, images: true);
     });
   }
 

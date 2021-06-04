@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:image_picker/image_picker.dart' as galleryPicker;
 
 class ImagePicker extends StatefulWidget {
@@ -15,14 +13,14 @@ class _ImagePickerState extends State<ImagePicker> {
   CameraController _controller;
   Future<void> _initializeControllerFuture;
   bool isCameraReady = false;
-
+  FlashMode _flash = FlashMode.auto;
   var imagePath;
 
   Future<void> _initCams() async {
     final cameras = await availableCameras();
     final cam = cameras.first;
     _controller =
-        CameraController(cam, ResolutionPreset.medium, enableAudio: false);
+        CameraController(cam, ResolutionPreset.max, enableAudio: false);
     _initializeControllerFuture = _controller.initialize();
     if (!mounted) {
       return;
@@ -79,6 +77,29 @@ class _ImagePickerState extends State<ImagePicker> {
     cropAndPass(result.path, context);
   }
 
+  void toggleFlash() {
+    if (_flash == FlashMode.off) {
+      setState(() {
+        _flash = FlashMode.auto;
+        _controller.setFlashMode(_flash);
+      });
+      return;
+    }
+    if (_flash == FlashMode.auto) {
+      setState(() {
+        _flash = FlashMode.always;
+        _controller.setFlashMode(_flash);
+      });
+      return;
+    }
+    if (_flash == FlashMode.always) {
+      setState(() {
+        _flash = FlashMode.off;
+        _controller.setFlashMode(_flash);
+      });
+    }
+  }
+
   @override
   void dispose() {
     // Dispose of the controller when the widget is disposed.
@@ -101,12 +122,34 @@ class _ImagePickerState extends State<ImagePicker> {
           return Center(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 50),
-                  child: AspectRatio(
-                    child: CameraPreview(_controller),
-                    aspectRatio: 1 / _controller.value.aspectRatio,
-                  ),
+                Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 50),
+                      child: AspectRatio(
+                        child: CameraPreview(_controller),
+                        aspectRatio: 1 / _controller.value.aspectRatio,
+                      ),
+                    ),
+                    Positioned(
+                      top: 60,
+                      left: 20,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: Material(
+                          color: Colors.black.withOpacity(0.5),
+                          child: IconButton(
+                              color: Colors.white.withOpacity(0.5),
+                              icon: Icon(_flash == FlashMode.off
+                                  ? Icons.flash_off
+                                  : _flash == FlashMode.always
+                                      ? Icons.flash_on
+                                      : Icons.flash_auto),
+                              onPressed: toggleFlash),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Expanded(
                   flex: 1,

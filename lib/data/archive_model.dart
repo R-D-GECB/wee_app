@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 
@@ -36,10 +38,13 @@ class ArchiveModel extends ChangeNotifier {
     return response;
   }
 
-  void delete(String key) {
-    box.delete(int.parse(key));
-    selected.remove(key);
-    notifyListeners();
+  void delete(String key, {bool images = false}) {
+    if (images) {
+      final data = valueOf(key);
+      if (data['images'] != null) {
+        data['images'].forEach((e) => File(e).delete());
+      }
+    }
   }
 
   void update(String id, Map value) {
@@ -72,7 +77,7 @@ class ArchiveModel extends ChangeNotifier {
 
   void deleteSelected() {
     List.from(selected).forEach((element) {
-      delete(element);
+      delete(element, images: true);
     });
     selected.clear();
   }

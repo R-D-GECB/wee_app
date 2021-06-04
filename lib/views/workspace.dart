@@ -306,7 +306,8 @@ class DataTile extends StatelessWidget {
       },
       onDismissed: (direction) {
         if (direction == DismissDirection.endToStart) {
-          Provider.of<WorkspaceModel>(context, listen: false).delete(id);
+          Provider.of<WorkspaceModel>(context, listen: false)
+              .delete(id, images: true);
         } else {
           Provider.of<ArchiveModel>(context, listen: false).add(
               Provider.of<WorkspaceModel>(context, listen: false)
@@ -386,6 +387,16 @@ class AppDrawer extends StatelessWidget {
                 icon: Icons.help,
                 name: 'FAQ',
                 route: '/faq',
+              ),
+              LinkTile(
+                icon: Icons.format_list_numbered_sharp,
+                name: 'Procedure',
+                route: '/procedure',
+              ),
+              LinkTile(
+                icon: Icons.grading_rounded,
+                name: 'Herbarium',
+                route: '/herbarium',
               ),
               LinkTile(
                 icon: Icons.info,

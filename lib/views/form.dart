@@ -1,7 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:wee_app/data/note_modal.dart';
 import 'package:wee_app/image_picker.dart';
@@ -25,6 +25,20 @@ class _FormViewState extends State<FormView> {
     data = widget.data;
     if (widget.editMode) {
       dateController.value = TextEditingValue(text: widget.data['Date']);
+    }
+  }
+
+  Future<void> managePhotoes(Map data) async {
+    if (data["images"] != null) {
+      final temp = await getTemporaryDirectory();
+      final dir = await getApplicationDocumentsDirectory();
+      for (var i = 0; i < data['images'].length; i++) {
+        final newPath =
+            "${dir.path}/${DateTime.now().microsecondsSinceEpoch}.jpg";
+        File(data['images'][i]).renameSync(newPath);
+        data['images'][i] = newPath;
+      }
+      await temp.list().forEach((element) => element.delete());
     }
   }
 
@@ -125,8 +139,10 @@ class _FormViewState extends State<FormView> {
                             label: Text('Cancel'),
                           ),
                           TextButton.icon(
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState.validate()) {
+                                await managePhotoes(data);
+
                                 Navigator.pop(context, data);
                               }
                             },
@@ -264,7 +280,18 @@ class _FormViewState extends State<FormView> {
             maxSize: 200,
             maxLines: 10,
           ),
-          ImageInput(data)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ImageInput(data, 0),
+                ImageInput(data, 1),
+                ImageInput(data, 2),
+                ImageInput(data, 3),
+              ],
+            ),
+          )
         ],
       ),
     );
@@ -340,7 +367,8 @@ class CustomField extends StatelessWidget {
 
 class ImageInput extends StatefulWidget {
   final Map data;
-  ImageInput(this.data);
+  final int index;
+  ImageInput(this.data, this.index);
   @override
   _ImageInputState createState() => _ImageInputState();
 }
@@ -348,20 +376,35 @@ class ImageInput extends StatefulWidget {
 class _ImageInputState extends State<ImageInput> {
   String productImagePath;
   @override
+  void initState() {
+    super.initState();
+
+    productImagePath = widget.data['images'] != null &&
+            widget.data['images'].length > widget.index
+        ? widget.data['images'][widget.index]
+        : null;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
         final result = await Navigator.push(
             context, MaterialPageRoute(builder: (context) => ImagePicker()));
         setState(() {
-          // ignore: unnecessary_statements
-          result == null ? null : productImagePath = result;
-          widget.data['image'] = productImagePath;
+          if (result != null) {
+            if (widget.data['images'] != null) {
+              widget.data['images'].add(result);
+            } else {
+              widget.data['images'] = [result];
+            }
+            productImagePath = result;
+          }
         });
       },
       child: Container(
-        height: 200,
-        width: 200,
+        height: 70,
+        width: 70,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Color.fromRGBO(100, 100, 100, 0.5),
@@ -382,12 +425,17 @@ class _ImageInputState extends State<ImageInput> {
                       child: IconButton(
                         color: Colors.white,
                         iconSize: 15,
-                        splashColor: Colors.red,
                         icon: Icon(Icons.close),
                         onPressed: () {
                           setState(() {
+                            widget.data['images'].remove(productImagePath);
+                            String P = productImagePath;
+                            File(productImagePath).exists().then((value) {
+                              if (value) {
+                                File(P).delete();
+                              }
+                            });
                             productImagePath = null;
-                            widget.data['image'] = null;
                           });
                         },
                       ),

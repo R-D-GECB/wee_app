@@ -7,12 +7,14 @@ import 'package:wee_app/data/default_model.dart';
 import 'package:wee_app/data/note_modal.dart';
 import 'package:wee_app/data/workspace_model.dart';
 import 'package:wee_app/views/about.dart';
+import 'package:wee_app/views/aboutapp.dart';
 import 'package:wee_app/views/archive.dart';
 import 'package:wee_app/views/defaults.dart';
 import 'package:wee_app/views/faq.dart';
 import 'package:wee_app/views/form.dart';
 import 'package:wee_app/views/notes.dart';
 import 'package:wee_app/views/preview.dart';
+import 'package:wee_app/views/procedure.dart';
 import 'package:wee_app/views/processing.dart';
 import 'package:wee_app/views/workspace.dart';
 import 'package:hive/hive.dart';
@@ -56,6 +58,8 @@ class WEEApp extends StatelessWidget {
           '/preview': (context) => PreviewView(),
           '/faq': (context) => FaqView(),
           '/notes': (context) => NotesView(),
+          '/procedure': (context) => ProcedureView(),
+          '/herbarium': (context) => HerbariumView(),
         },
         onGenerateRoute: (settings) {
           if (settings.name == '/edit') {
