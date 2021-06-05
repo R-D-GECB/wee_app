@@ -7,7 +7,7 @@ class DefaultsModel extends ChangeNotifier {
   DefaultsModel() {
     Hive.openBox<Map>('defaults').then((value) {
       box = value;
-      label = box.get(1)['label'] == null ? false : box.get(1)['label'];
+      label = box.get(1) == null ? false : box.get(1)['label'];
       notifyListeners();
     });
   }

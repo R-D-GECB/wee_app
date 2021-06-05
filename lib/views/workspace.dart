@@ -10,51 +10,11 @@ class WorkspaceView extends StatelessWidget {
     Map defaults = Provider.of<DefaultsModel>(context).data;
     return Scaffold(
         drawer: AppDrawer(),
-        floatingActionButtonLocation:
-            FloatingActionButtonLocation.miniCenterFloat,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: AnimatedOpacity(
           duration: Duration(milliseconds: 1000),
           opacity: defaults == null ? 0 : 1,
-          child: TextButton.icon(
-            label: Text(
-              Provider.of<WorkspaceModel>(context, listen: false)
-                      .alteastOneSelected
-                  ? 'Generate'
-                  : 'Add',
-              style: TextStyle(fontSize: 17),
-            ),
-            icon: Icon(Provider.of<WorkspaceModel>(context, listen: false)
-                    .alteastOneSelected
-                ? Icons.insert_drive_file_rounded
-                : Icons.add),
-            style: ButtonStyle(
-              foregroundColor:
-                  MaterialStateProperty.all(Theme.of(context).primaryColor),
-              backgroundColor:
-                  MaterialStateProperty.all(Theme.of(context).accentColor),
-              padding: MaterialStateProperty.all(
-                  EdgeInsets.fromLTRB(10, 10, 20, 10)),
-              elevation: MaterialStateProperty.all(10),
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50))),
-            ),
-            onPressed: Provider.of<WorkspaceModel>(context, listen: false)
-                    .alteastOneSelected
-                ? () {
-                    Navigator.of(context).pushNamed('/processing',
-                        arguments:
-                            Provider.of<WorkspaceModel>(context, listen: false)
-                                .selectedValues);
-                  }
-                : () async {
-                    final response = await Navigator.of(context)
-                        .pushNamed('/add', arguments: Map.from(defaults));
-                    if (response != null) {
-                      Provider.of<WorkspaceModel>(context, listen: false)
-                          .add(response);
-                    }
-                  },
-          ),
+          child: ActionButton(defaults: defaults),
         ),
         backgroundColor: Theme.of(context).backgroundColor,
         body: CustomScrollView(
@@ -90,7 +50,7 @@ class WorkspaceView extends StatelessWidget {
                                 .alteastOneSelected
                             ? CrossFadeState.showSecond
                             : CrossFadeState.showFirst,
-                    firstChild: Container(),
+                    firstChild: Container(width: 100),
                     secondChild: Row(
                       children: [
                         IconButton(
@@ -183,6 +143,155 @@ class WorkspaceView extends StatelessWidget {
             WorkspaceList()
           ],
         ));
+  }
+}
+
+class ActionButton extends StatelessWidget {
+  const ActionButton({
+    Key key,
+    @required this.defaults,
+  }) : super(key: key);
+
+  final Map defaults;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 60,
+      margin: EdgeInsets.all(20),
+      child: Stack(
+        children: [
+          TweenAnimationBuilder<double>(
+            duration: Duration(milliseconds: 300),
+            curve: Curves.easeInQuad,
+            tween: Provider.of<WorkspaceModel>(context).alteastOneSelected
+                ? Tween(begin: 0, end: 1)
+                : Tween(begin: 1, end: 0),
+            builder: (context, double value, child) {
+              return Flex(
+                direction: Axis.horizontal,
+                children: [
+                  Expanded(
+                    child: Material(
+                      color: Theme.of(context).accentColor,
+                      shape: ContinuousRectangleBorder(
+                          borderRadius: BorderRadius.horizontal(
+                              left: Radius.circular(40),
+                              right: Radius.lerp(Radius.circular(0),
+                                  Radius.circular(40), value))),
+                      child: Container(),
+                    ),
+                  ),
+                  SizedBox(width: 20 * value),
+                  Expanded(
+                    child: Material(
+                      color: Theme.of(context).accentColor,
+                      shape: ContinuousRectangleBorder(
+                          borderRadius: BorderRadius.horizontal(
+                              right: Radius.circular(40),
+                              left: Radius.lerp(Radius.circular(0),
+                                  Radius.circular(40), value))),
+                      child: Container(),
+                    ),
+                  )
+                ],
+              );
+            },
+          ),
+          AnimatedCrossFade(
+              firstChild: Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: Flex(
+                  direction: Axis.horizontal,
+                  children: [
+                    Expanded(
+                        child: TextButton(
+                      onPressed: () {}, //TODO: DataSheet Navigation
+                      style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                              ContinuousRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30))),
+                          overlayColor: MaterialStateProperty.all(
+                              Theme.of(context)
+                                  .primaryColorLight
+                                  .withOpacity(0.1))),
+                      child: Text(
+                        'Datasheet',
+                        style: TextStyle(
+                            fontSize: 25,
+                            color: Theme.of(context).primaryColor),
+                      ),
+                    )),
+                    SizedBox(width: 20),
+                    Expanded(
+                        child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/processing',
+                            arguments: Provider.of<WorkspaceModel>(context,
+                                    listen: false)
+                                .selectedValues);
+                      },
+                      style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                              ContinuousRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30))),
+                          overlayColor: MaterialStateProperty.all(
+                              Theme.of(context)
+                                  .primaryColorLight
+                                  .withOpacity(0.1))),
+                      child: Text(
+                        'Labels',
+                        style: TextStyle(
+                            fontSize: 25,
+                            color: Theme.of(context).primaryColor),
+                      ),
+                    )),
+                  ],
+                ),
+              ),
+              secondChild: Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: Flex(
+                  direction: Axis.horizontal,
+                  children: [
+                    Expanded(
+                        child: TextButton(
+                      onPressed: () async {
+                        final response = await Navigator.of(context)
+                            .pushNamed('/add', arguments: Map.from(defaults));
+                        if (response != null) {
+                          Provider.of<WorkspaceModel>(context, listen: false)
+                              .add(response);
+                        }
+                      }, //TODO: DataSheet Navigation
+                      style: ButtonStyle(
+                          shape: MaterialStateProperty.all(
+                              ContinuousRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30))),
+                          overlayColor: MaterialStateProperty.all(
+                              Theme.of(context)
+                                  .primaryColorLight
+                                  .withOpacity(0.1))),
+                      child: Text(
+                        'Add',
+                        style: TextStyle(
+                            fontSize: 25,
+                            color: Theme.of(context).primaryColor),
+                      ),
+                    )),
+                  ],
+                ),
+              ),
+              crossFadeState:
+                  Provider.of<WorkspaceModel>(context).alteastOneSelected
+                      ? CrossFadeState.showFirst
+                      : CrossFadeState.showSecond,
+              firstCurve: Curves.easeInQuad,
+              secondCurve: Curves.easeInQuad,
+              duration: Duration(milliseconds: 300)),
+        ],
+      ),
+    );
   }
 }
 
