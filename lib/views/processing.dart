@@ -5,6 +5,8 @@ import 'package:wee_app/data/default_model.dart';
 import 'package:wee_app/generator.dart';
 
 class ProcessingView extends StatefulWidget {
+  final bool datasheet;
+  ProcessingView({this.datasheet = false});
   @override
   _ProcessingViewState createState() => _ProcessingViewState();
 }
@@ -17,9 +19,10 @@ class _ProcessingViewState extends State<ProcessingView> {
   Widget build(BuildContext context) {
     if (!init) {
       init = true;
+      Function process = widget.datasheet ? generateDataSheet : generate;
       List<Map> values = ModalRoute.of(context).settings.arguments;
       total = values.length;
-      generate(values, Provider.of<DefaultsModel>(context, listen: false).label,
+      process(values, Provider.of<DefaultsModel>(context, listen: false).label,
           () {
         setState(() {
           complete += 1;

@@ -43,7 +43,13 @@ class NoteField extends StatelessWidget {
               onChanged: (value) {
                 Provider.of<NotesModel>(context, listen: false).content = value;
               },
-              decoration: InputDecoration(border: InputBorder.none),
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: "Enter notes Here...",
+                  hintStyle: TextStyle(
+                      color: Theme.of(context)
+                          .primaryColorLight
+                          .withOpacity(0.3))),
               scrollPhysics: BouncingScrollPhysics(),
               maxLines: null,
               minLines: 20,

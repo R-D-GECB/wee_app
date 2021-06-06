@@ -157,7 +157,7 @@ class ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60,
+      height: 45,
       margin: EdgeInsets.all(20),
       child: Stack(
         children: [
@@ -176,9 +176,9 @@ class ActionButton extends StatelessWidget {
                       color: Theme.of(context).accentColor,
                       shape: ContinuousRectangleBorder(
                           borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(40),
+                              left: Radius.circular(30),
                               right: Radius.lerp(Radius.circular(0),
-                                  Radius.circular(40), value))),
+                                  Radius.circular(30), value))),
                       child: Container(),
                     ),
                   ),
@@ -188,9 +188,9 @@ class ActionButton extends StatelessWidget {
                       color: Theme.of(context).accentColor,
                       shape: ContinuousRectangleBorder(
                           borderRadius: BorderRadius.horizontal(
-                              right: Radius.circular(40),
+                              right: Radius.circular(30),
                               left: Radius.lerp(Radius.circular(0),
-                                  Radius.circular(40), value))),
+                                  Radius.circular(30), value))),
                       child: Container(),
                     ),
                   )
@@ -199,95 +199,91 @@ class ActionButton extends StatelessWidget {
             },
           ),
           AnimatedCrossFade(
-              firstChild: Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: Flex(
-                  direction: Axis.horizontal,
-                  children: [
-                    Expanded(
-                        child: TextButton(
-                      onPressed: () {}, //TODO: DataSheet Navigation
-                      style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
-                              ContinuousRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30))),
-                          overlayColor: MaterialStateProperty.all(
-                              Theme.of(context)
-                                  .primaryColorLight
-                                  .withOpacity(0.1))),
-                      child: Text(
-                        'Datasheet',
-                        style: TextStyle(
-                            fontSize: 25,
-                            color: Theme.of(context).primaryColor),
-                      ),
-                    )),
-                    SizedBox(width: 20),
-                    Expanded(
-                        child: TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/processing',
-                            arguments: Provider.of<WorkspaceModel>(context,
-                                    listen: false)
-                                .selectedValues);
-                      },
-                      style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
-                              ContinuousRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30))),
-                          overlayColor: MaterialStateProperty.all(
-                              Theme.of(context)
-                                  .primaryColorLight
-                                  .withOpacity(0.1))),
-                      child: Text(
-                        'Labels',
-                        style: TextStyle(
-                            fontSize: 25,
-                            color: Theme.of(context).primaryColor),
-                      ),
-                    )),
-                  ],
-                ),
+              firstChild: Flex(
+                direction: Axis.horizontal,
+                children: [
+                  Expanded(
+                      child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/processing_datasheet',
+                          arguments: Provider.of<WorkspaceModel>(context,
+                                  listen: false)
+                              .selectedValues);
+                    },
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all(
+                            ContinuousRectangleBorder(
+                                borderRadius: BorderRadius.circular(30))),
+                        overlayColor: MaterialStateProperty.all(
+                            Theme.of(context)
+                                .primaryColorLight
+                                .withOpacity(0.1))),
+                    child: Text(
+                      'Datasheet',
+                      style: TextStyle(
+                          fontSize: 20, color: Theme.of(context).primaryColor),
+                    ),
+                  )),
+                  SizedBox(width: 20),
+                  Expanded(
+                      child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/processing',
+                          arguments: Provider.of<WorkspaceModel>(context,
+                                  listen: false)
+                              .selectedValues);
+                    },
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all(
+                            ContinuousRectangleBorder(
+                                borderRadius: BorderRadius.circular(30))),
+                        overlayColor: MaterialStateProperty.all(
+                            Theme.of(context)
+                                .primaryColorLight
+                                .withOpacity(0.1))),
+                    child: Text(
+                      'Labels',
+                      style: TextStyle(
+                          fontSize: 20, color: Theme.of(context).primaryColor),
+                    ),
+                  )),
+                ],
               ),
-              secondChild: Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: Flex(
-                  direction: Axis.horizontal,
-                  children: [
-                    Expanded(
-                        child: TextButton(
-                      onPressed: () async {
-                        final response = await Navigator.of(context)
-                            .pushNamed('/add', arguments: Map.from(defaults));
-                        if (response != null) {
-                          Provider.of<WorkspaceModel>(context, listen: false)
-                              .add(response);
-                        }
-                      }, //TODO: DataSheet Navigation
-                      style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
-                              ContinuousRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30))),
-                          overlayColor: MaterialStateProperty.all(
-                              Theme.of(context)
-                                  .primaryColorLight
-                                  .withOpacity(0.1))),
-                      child: Text(
-                        'Add',
-                        style: TextStyle(
-                            fontSize: 25,
-                            color: Theme.of(context).primaryColor),
-                      ),
-                    )),
-                  ],
-                ),
+              secondChild: Flex(
+                direction: Axis.horizontal,
+                children: [
+                  Expanded(
+                      child: TextButton(
+                    onPressed: () async {
+                      final response = await Navigator.of(context)
+                          .pushNamed('/add', arguments: Map.from(defaults));
+                      if (response != null) {
+                        Provider.of<WorkspaceModel>(context, listen: false)
+                            .add(response);
+                      }
+                    },
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all(
+                            ContinuousRectangleBorder(
+                                borderRadius: BorderRadius.circular(30))),
+                        overlayColor: MaterialStateProperty.all(
+                            Theme.of(context)
+                                .primaryColorLight
+                                .withOpacity(0.1))),
+                    child: Text(
+                      'Add',
+                      style: TextStyle(
+                          fontSize: 25, color: Theme.of(context).primaryColor),
+                    ),
+                  )),
+                ],
               ),
               crossFadeState:
                   Provider.of<WorkspaceModel>(context).alteastOneSelected
                       ? CrossFadeState.showFirst
                       : CrossFadeState.showSecond,
-              firstCurve: Curves.easeInQuad,
-              secondCurve: Curves.easeInQuad,
+              firstCurve: Curves.easeIn,
+              secondCurve: Curves.easeIn,
               duration: Duration(milliseconds: 300)),
         ],
       ),

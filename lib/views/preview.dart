@@ -5,8 +5,8 @@ import 'package:pdf_viewer_jk/pdf_viewer_jk.dart';
 import 'package:share/share.dart';
 
 class PreviewView extends StatelessWidget {
-  final TextEditingController _filename = TextEditingController.fromValue(
-      TextEditingValue(text: 'generated_file.pdf'));
+  final TextEditingController _filename =
+      TextEditingController.fromValue(TextEditingValue(text: 'generated.pdf'));
   @override
   Widget build(BuildContext context) {
     String path = ModalRoute.of(context).settings.arguments;

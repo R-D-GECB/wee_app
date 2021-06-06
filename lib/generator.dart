@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
+import 'package:flutter/rendering.dart' as r;
+import 'package:vector_math/vector_math.dart' as v;
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -29,7 +31,7 @@ Future<String> generate(List<Map> values, bool label, Function callback) async {
   }
 
   final output = await getTemporaryDirectory();
-  final String path = "${output.path}/generated_file.pdf";
+  final String path = "${output.path}/generated.pdf";
   final file = File(path);
   await file.writeAsBytes(await pdf.save());
   return path;
@@ -108,7 +110,7 @@ Container outerLabelBlock(value) {
                   text: '${value['Epithet']} ',
                   style: TextStyle(font: Font.timesBoldItalic())),
               TextSpan(
-                  text: '${value['Author'] ?? ''} ',
+                  text: '${value['Author']}',
                   style: TextStyle(font: Font.times())),
             ])),
         Text(value['Family'].toUpperCase())
@@ -203,8 +205,10 @@ Locality: ${value['Locality']}${value['Coordinates'] == null ? '' : '\nGPS: ${va
   String content2 = '''
 ']}
 Scientific Name: ${value['Scientific Name']} ${value['Author citation'] ?? ''} ${value['Infraspecific category'] ?? ''} ${value['Epithet'] ?? ''} ${value['Author']}
-Distribution: ${value['Distribution ']}
   ''';
+  if (value['Distribution '] != null) {
+    content2 += '\nDistribution: ${value['Distribution ']}';
+  }
   if (value['Flowering & Fruiting'] != null) {
     content2 += '\nFlowering & Fruiting: ${value['Flowering & Fruiting']}';
   }
@@ -214,8 +218,7 @@ Distribution: ${value['Distribution ']}
   if (value['URL for Reference \n\n'] != null) {
     content2 += '\nURL for Reference: ${value['URL for Reference \n\n']}';
   }
-  print(content1);
-  print(content2);
+
   return [
     MemoryImage((await QrPainter(data: content1, version: QrVersions.auto)
             .toImageData(2048, format: ImageByteFormat.png))
@@ -226,4 +229,182 @@ Distribution: ${value['Distribution ']}
         .buffer
         .asUint8List()),
   ];
+}
+
+Future<String> generateDataSheet(
+    List<Map> values, bool label, Function callback) async {
+  Document pdf = Document();
+  int perPage = 2;
+  callback = callback;
+  int numberOfPages = values.length ~/ perPage;
+  int lastPage = values.length % perPage;
+  for (var i = 0, start = 0, end = perPage; i < numberOfPages; i++) {
+    pdf.addPage(await makeSheetPage(values.getRange(start, end), callback));
+    start += perPage;
+    end += perPage;
+  }
+  if (lastPage != 0) {
+    pdf.addPage(await makeSheetPage(
+        values.getRange(values.length - lastPage, values.length), callback));
+  }
+
+  final output = await getTemporaryDirectory();
+  final String path = "${output.path}/generated.pdf";
+  final file = File(path);
+  await file.writeAsBytes(await pdf.save());
+  return path;
+}
+
+Future<Page> makeSheetPage(Iterable<Map> values, callback) async {
+  List valuesList = values.toList();
+  return Page(
+      theme: ThemeData(defaultTextStyle: TextStyle(font: Font.times())),
+      pageFormat: PdfPageFormat.a4,
+      margin: EdgeInsets.all(0),
+      build: (context) {
+        return Column(
+            children: List.generate(values.length, (index) {
+          callback();
+          return dataSheetItemBlock(valuesList[index]);
+        }));
+      });
+}
+
+Widget dataSheetItemBlock(Map value) {
+  return Container(
+      height: PdfPageFormat.a4.height / 2,
+      decoration: BoxDecoration(
+          border:
+              Border(bottom: BorderSide(width: 1, style: BorderStyle.dashed))),
+      child: Column(children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Container(
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                  border: Border(
+                      right: BorderSide(width: 1, style: BorderStyle.dotted))),
+              child: Text('Folding 1', textAlign: TextAlign.right),
+              width: PdfPageFormat.a4.width / 3),
+          Container(
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                  border: Border(
+                      left: BorderSide(width: 1, style: BorderStyle.dotted))),
+              child: Text('Folding 2'),
+              width: PdfPageFormat.a4.width / 3),
+        ]),
+        Expanded(
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+              Expanded(
+                  child: Transform(
+                      adjustLayout: true,
+                      child: Container(
+                          child: Text('Folding 3'),
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  left: BorderSide(
+                                      style: BorderStyle.solid, width: 1)))),
+                      transform: r.Matrix4.rotationZ(v.radians(-90)))),
+              Container(
+                  child: leftBlock(value),
+                  width: PdfPageFormat.a4.width / 3 - 45),
+              Container(
+                  color: PdfColor.fromHex('#ffffff'),
+                  width: PdfPageFormat.a4.width / 3 - 25),
+              Container(
+                  child: rightBlock(value),
+                  width: PdfPageFormat.a4.width / 3 - 45),
+              Expanded(
+                  child: Transform(
+                      adjustLayout: true,
+                      child: Container(
+                          child: Text('Folding 3'),
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              border: Border(
+                                  left: BorderSide(
+                                      style: BorderStyle.solid, width: 1)))),
+                      transform: r.Matrix4.rotationZ(v.radians(-90)))),
+            ])),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Container(
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                  border: Border(
+                      top: BorderSide(width: 1, style: BorderStyle.solid),
+                      right: BorderSide(width: 1, style: BorderStyle.dotted))),
+              child: Text('Folding 1', textAlign: TextAlign.right),
+              width: PdfPageFormat.a4.width / 3),
+          Container(
+            padding: EdgeInsets.all(5),
+            child: Text('Base Out', textAlign: TextAlign.center),
+            width: (PdfPageFormat.a4.width / 3),
+            decoration: BoxDecoration(
+                border: Border(
+              top: BorderSide(width: 1, style: BorderStyle.solid),
+            )),
+          ),
+          Container(
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                  border: Border(
+                      top: BorderSide(width: 1, style: BorderStyle.solid),
+                      left: BorderSide(width: 1, style: BorderStyle.dotted))),
+              child: Text('Folding 2'),
+              width: PdfPageFormat.a4.width / 3),
+        ]),
+      ]));
+}
+
+Widget leftBlock(Map value) {
+  String content2 = '';
+  if (value['Description \n\n'] != null) {
+    content2 += '\n\n\n ${value['Description \n\n']}';
+  }
+  if (value['Distribution '] != null) {
+    content2 += '\nDistribution: ${value['Distribution ']}';
+  }
+  if (value['Flowering & Fruiting'] != null) {
+    content2 += '\nFlowering & Fruiting: ${value['Flowering & Fruiting']}';
+  }
+  if (value['URL for Reference \n\n'] != null) {
+    content2 += '\nURL for Reference: ${value['URL for Reference \n\n']}';
+  }
+  return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+    RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(children: <TextSpan>[
+          TextSpan(
+              text: '${value['Scientific Name']} ',
+              style: TextStyle(font: Font.timesBoldItalic())),
+          TextSpan(
+              text:
+                  '${value['Author citation'] ?? ''} ${value['Infraspecific category'] ?? ''} ',
+              style: TextStyle(font: Font.times())),
+          TextSpan(
+              text: '${value['Epithet'] ?? ''} ',
+              style: TextStyle(font: Font.timesBoldItalic())),
+          TextSpan(
+              text: '${value['Author']}', style: TextStyle(font: Font.times())),
+        ])),
+    Text(content2)
+  ]);
+}
+
+Widget rightBlock(Map value) {
+  final images = value['images'];
+  return images == null
+      ? Column()
+      : GridView(
+          childAspectRatio: 1,
+          crossAxisCount: 2,
+          crossAxisSpacing: 3,
+          mainAxisSpacing: 3,
+          children: List.generate(
+              images.length,
+              (index) =>
+                  Image(MemoryImage(File(images[index]).readAsBytesSync()))));
 }

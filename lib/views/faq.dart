@@ -28,6 +28,8 @@ class FaqView extends StatelessWidget {
 }
 
 final List<Entry> tiles = <Entry>[
+  Entry('How to use Note feature?',
+      'You can type or paste any text into the notes screen, which can be accessed from the main navigation drawer. Double tap anywhere on the edit or add screen to bring up the notes as a popup from which you can copy and paste into the fields.'),
   Entry(
     'What are the swiping actions ?',
     'Inorder to make the experience on application more user friendly two swiping actions are being implemented. Swipe right to archive and swipe left to delete.',
@@ -37,7 +39,7 @@ final List<Entry> tiles = <Entry>[
     'Archive option is used for archiving the data that user feels more important and needs to access frequently. Archive is interfaced in a table format which shows the date of creation, scientific name, family and collected by.',
   ),
   Entry(
-    'Why app stops working while generating pdf ?',
+    'Why the app seems to stops working while generating pdf ?',
     'The app does not stops its performance during pdf generation, it is actually working in background for the qr code to be encoded. It might take some time for the generation and varies according to the number of data to be generated.',
   ),
   Entry(

@@ -55,6 +55,7 @@ class WEEApp extends StatelessWidget {
           '/defaults': (context) => DefaultView(),
           '/archive': (context) => ArchiveView(),
           '/processing': (context) => ProcessingView(),
+          '/processing_datasheet': (context) => ProcessingView(datasheet: true),
           '/preview': (context) => PreviewView(),
           '/faq': (context) => FaqView(),
           '/notes': (context) => NotesView(),
