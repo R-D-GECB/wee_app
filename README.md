@@ -1,12 +1,12 @@
 # Wee - Genarator
 
 Wee is a Mini Herbarium designed by Catholicate College Pathanamthitta. This app is developed as per their request by R&D GECBH.
-It is aimed to generate ready to print pdf files for the herbarium information labels. Apart from serving the main function, it also features a data management system to store and reuse the label information.
+It is aimed to generate ready to print pdf files for the herbarium information labels and datasheets. Apart from serving the main function, it also features a data management system to store and reuse the information.
 
 # Technology
 
-This project is entirely built with flutter and uses Hive DB as a data storage solution.
-Currently the software is only targeted for Android platform. Web and ios builds are not tested.
+This project is built with flutter and uses Hive DB as a database.
+The app is targeted for Android platform.
 
 # Contact US
 
