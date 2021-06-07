@@ -142,8 +142,26 @@ class _FormViewState extends State<FormView> {
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 await managePhotoes(data);
-
                                 Navigator.pop(context, data);
+                              } else {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                          title: Text('Error'),
+                                          backgroundColor:
+                                              Theme.of(context).backgroundColor,
+                                          titleTextStyle: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColorLight,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20),
+                                          contentTextStyle: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColorLight,
+                                              fontSize: 16),
+                                          content: Text(
+                                              'Please fill mandatory fields.'),
+                                        ));
                               }
                             },
                             style: ButtonStyle(

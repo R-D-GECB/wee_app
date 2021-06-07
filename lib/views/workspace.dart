@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:wee_app/data/archive_model.dart';
 import 'package:wee_app/data/default_model.dart';
@@ -381,7 +382,7 @@ class DataTile extends StatelessWidget {
                         color: Theme.of(context).primaryColorLight,
                         fontSize: 16),
                     content: Text(
-                        'Do you really want to delete "${values['Scientific Name & Author']}" ?'),
+                        'Do you really want to delete "${values['Scientific Name']}" ?'),
                     actions: [
                       TextButton(
                           onPressed: () => Navigator.pop(context, false),

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:wee_app/data/archive_model.dart';
 import 'package:wee_app/data/default_model.dart';
@@ -40,6 +41,9 @@ class WEEApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+            appBarTheme: Theme.of(context)
+                .appBarTheme
+                .copyWith(brightness: Brightness.dark),
             accentColor: Colors.green[600],
             backgroundColor: Colors.grey[800],
             primaryColor: Colors.grey[850],

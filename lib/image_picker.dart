@@ -119,83 +119,85 @@ class _ImagePickerState extends State<ImagePicker> {
       future: _initializeControllerFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return Center(
-            child: Column(
-              children: [
-                Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 50),
-                      child: AspectRatio(
-                        child: CameraPreview(_controller),
-                        aspectRatio: 1 / _controller.value.aspectRatio,
-                      ),
+          return Scaffold(
+            backgroundColor: Colors.black,
+            body: Center(
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50),
+                    child: AspectRatio(
+                      child: CameraPreview(_controller),
+                      aspectRatio: 1 / _controller.value.aspectRatio,
                     ),
-                    Positioned(
-                      top: 60,
-                      left: 20,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: Material(
-                          color: Colors.black.withOpacity(0.5),
-                          child: IconButton(
-                              color: Colors.white.withOpacity(0.5),
-                              icon: Icon(_flash == FlashMode.off
-                                  ? Icons.flash_off
-                                  : _flash == FlashMode.always
-                                      ? Icons.flash_on
-                                      : Icons.flash_auto),
-                              onPressed: toggleFlash),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      TextButton.icon(
-                          onPressed: () {
-                            chooseFrmGallery(context);
-                          },
-                          icon: Icon(
-                            Icons.photo_library,
-                            color: Colors.white,
-                          ),
-                          label: Text(
-                            'Gallery',
-                            style: TextStyle(color: Colors.white),
-                          )),
-                      GestureDetector(
-                          onTap: () {
-                            takePhoto(context);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white,
-                            ),
-                            height: 60,
-                            width: 60,
-                          )),
-                      TextButton.icon(
-                          onPressed: () {
-                            Navigator.pop(context, null);
-                          },
-                          icon: Icon(
-                            Icons.close,
-                            color: Colors.white,
-                          ),
-                          label: Text(
-                            'Cancel',
-                            style: TextStyle(color: Colors.white),
-                          )),
-                    ],
                   ),
-                )
-              ],
+                  Positioned(
+                    top: 60,
+                    left: 20,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: Material(
+                        color: Colors.black.withOpacity(0.5),
+                        child: IconButton(
+                            color: Colors.white.withOpacity(0.5),
+                            icon: Icon(_flash == FlashMode.off
+                                ? Icons.flash_off
+                                : _flash == FlashMode.always
+                                    ? Icons.flash_on
+                                    : Icons.flash_auto),
+                            onPressed: toggleFlash),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            floatingActionButton: Container(
+              color: Colors.black,
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextButton.icon(
+                      onPressed: () {
+                        chooseFrmGallery(context);
+                      },
+                      icon: Icon(
+                        Icons.photo_library,
+                        color: Colors.white,
+                      ),
+                      label: Text(
+                        'Gallery',
+                        style: TextStyle(color: Colors.white),
+                      )),
+                  GestureDetector(
+                      onTap: () {
+                        takePhoto(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                        ),
+                        height: 60,
+                        width: 60,
+                      )),
+                  TextButton.icon(
+                      onPressed: () {
+                        Navigator.pop(context, null);
+                      },
+                      icon: Icon(
+                        Icons.close,
+                        color: Colors.white,
+                      ),
+                      label: Text(
+                        'Cancel',
+                        style: TextStyle(color: Colors.white),
+                      )),
+                ],
+              ),
             ),
           );
         } else {
