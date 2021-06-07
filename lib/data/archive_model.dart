@@ -45,6 +45,9 @@ class ArchiveModel extends ChangeNotifier {
         data['images'].forEach((e) => File(e).delete());
       }
     }
+    box.delete(int.parse(key));
+    selected.remove(key);
+    notifyListeners();
   }
 
   void update(String id, Map value) {
