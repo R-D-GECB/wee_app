@@ -335,7 +335,7 @@ class HerbariumView extends StatelessWidget {
               ),
               SizedBox(width: 20.0, height: 20.0),
               Text(
-                'The App generates 3 QR codes, a label, green label strap with a scale and colour codes (optional), herbarium label and pouch label in specified size and colour. It can be printed on sticker paper and used for the preparation of WEE herbarium. The app also generates a data sheet with detailed description and photographs in PDF format.',
+                'The App generates 3 QR codes, a label, green label strip with a scale and colour codes (optional), herbarium label and pouch label in specified size and colour. It can be printed on sticker paper and used for the preparation of WEE herbarium. The app also generates a data sheet with detailed description and photographs in PDF format.',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18.0,

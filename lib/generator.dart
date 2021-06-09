@@ -110,7 +110,7 @@ Container outerLabelBlock(value) {
                   text: '${value['Epithet'] ?? ''} ',
                   style: TextStyle(font: Font.timesBoldItalic())),
               TextSpan(
-                  text: '${value['Author']}',
+                  text: '${value['Author'] ?? ''}',
                   style: TextStyle(font: Font.times())),
             ])),
         Text(value['Family'].toUpperCase())
@@ -165,12 +165,13 @@ Container mainLabelBlock(value) {
               text: '${value['Epithet'] ?? ''} ',
               style: TextStyle(font: Font.timesBoldItalic())),
           TextSpan(
-              text: '${value['Author']}', style: TextStyle(font: Font.times())),
+              text: '${value['Author'] ?? ''}',
+              style: TextStyle(font: Font.times())),
         ])),
         Text("Family: ${value['Family'].toUpperCase()}"),
         value['Notes \n\n'] == null
             ? Container()
-            : Text('Notes: ${value['Notes \n\n']}'),
+            : Text('Notes: ${value['Notes \n\n']}', maxLines: 3),
         Text("Locality: ${value['Locality']}"),
         value['Coordinates'] == null
             ? Container()
@@ -204,7 +205,7 @@ Locality: ${value['Locality']}${value['Coordinates'] == null ? '' : '\nGPS: ${va
 ''';
   String content2 = '''
 ']}
-Scientific Name: ${value['Scientific Name']} ${value['Author citation'] ?? ''} ${value['Infraspecific category'] ?? ''} ${value['Epithet'] ?? ''} ${value['Author']}
+Scientific Name: ${value['Scientific Name']} ${value['Author citation'] ?? ''} ${value['Infraspecific category'] ?? ''} ${value['Epithet'] ?? ''} ${value['Author'] ?? ''}
   ''';
   if (value['Distribution '] != null) {
     content2 += '\nDistribution: ${value['Distribution ']}';
@@ -386,7 +387,8 @@ Widget leftBlock(Map value) {
               text: '${value['Epithet'] ?? ''} ',
               style: TextStyle(font: Font.timesBoldItalic())),
           TextSpan(
-              text: '${value['Author']}', style: TextStyle(font: Font.times())),
+              text: '${value['Author'] ?? ''}',
+              style: TextStyle(font: Font.times())),
         ])),
     Text('Family: ${value['Family'].toUpperCase()}'),
     Text(content2)

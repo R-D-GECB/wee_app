@@ -254,7 +254,11 @@ class _FormViewState extends State<FormView> {
           CustomField(
               label: 'Infraspecific category', data: data, emptyAllowed: true),
           CustomField(label: 'Epithet', data: data, emptyAllowed: true),
-          CustomField(label: 'Author', data: data),
+          CustomField(
+            label: 'Author',
+            data: data,
+            emptyAllowed: true,
+          ),
           CustomField(
             data: data,
             label: 'Family',
