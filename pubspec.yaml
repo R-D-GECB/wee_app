@@ -61,6 +61,7 @@ flutter:
     - assets/wee_label.jpg
     - assets/institutes.png
     - assets/linkedin.png
+    - assets/sample.jpg
 
   # To add assets to your application, add an assets section, like this:
 

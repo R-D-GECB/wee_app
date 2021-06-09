@@ -203,6 +203,13 @@ class ProcedureView extends StatelessWidget {
                     fontWeight: FontWeight.normal,
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Image.asset('assets/sample.jpg'),
+                  ),
+                )
               ],
             ),
           )),

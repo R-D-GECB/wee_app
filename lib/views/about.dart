@@ -31,9 +31,9 @@ class AboutView extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 50),
+                padding: const EdgeInsets.only(top: 20),
                 child: Text(
-                  'This app is a collaborative project of Catholicate College Pathanamthitta and Government Engineering College Barton Hill.',
+                  'This app is a collaborative project of CATH Herbarium, Department of Botany, Catholicate College, Pathanamthitta, Kerala, India and R&D, Government Engineering College Barton Hill, Thiruvananthapuram, Kerala, India.',
                   style: TextStyle(
                     color: Theme.of(context).primaryColorLight,
                     fontSize: 20.0,
@@ -43,7 +43,7 @@ class AboutView extends StatelessWidget {
               ),
               Divider(
                 color: Theme.of(context).accentColor,
-                height: 50,
+                height: 30,
                 thickness: 2,
               ),
               Padding(

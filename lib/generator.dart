@@ -42,7 +42,7 @@ Future<Page> makePage(Iterable<Map> values, bool label, callback) async {
   List qrCodes = await makeQrcodes(valuesList, callback);
   return Page(
       theme: ThemeData(defaultTextStyle: TextStyle(font: Font.times())),
-      margin: EdgeInsets.only(top: 90),
+      margin: EdgeInsets.only(top: 1),
       pageFormat: PdfPageFormat.a4,
       build: (context) {
         return Column(
@@ -60,19 +60,19 @@ Widget itemBlock(Map value, label, List qrCodes) {
     Column(children: [
       Row(children: [
         Container(
-          margin: EdgeInsets.all(PdfPageFormat.cm * 0.1),
+          margin: EdgeInsets.all(PdfPageFormat.cm * 0.5),
           height: PdfPageFormat.cm * 2.5,
           width: PdfPageFormat.cm * 2.5,
           child: Image(qrCodes[0]),
         ),
         Container(
-          margin: EdgeInsets.all(PdfPageFormat.cm * 0.1),
+          margin: EdgeInsets.all(PdfPageFormat.cm * 0.5),
           height: PdfPageFormat.cm * 2.5,
           width: PdfPageFormat.cm * 2.5,
           child: Image(qrCodes[1]),
         ),
         Container(
-          margin: EdgeInsets.all(PdfPageFormat.cm * 0.1),
+          margin: EdgeInsets.all(PdfPageFormat.cm * 0.5),
           height: PdfPageFormat.cm * 2.5,
           width: PdfPageFormat.cm * 2.5,
           child: Image(qrCodes[0]),
@@ -90,7 +90,7 @@ Widget itemBlock(Map value, label, List qrCodes) {
 
 Container outerLabelBlock(value) {
   return Container(
-      margin: EdgeInsets.all(PdfPageFormat.cm * 0.1),
+      margin: EdgeInsets.only(bottom: PdfPageFormat.cm * 0.5),
       height: PdfPageFormat.cm * 2,
       width: PdfPageFormat.cm * 8,
       decoration: BoxDecoration(border: Border.all()),
@@ -107,7 +107,7 @@ Container outerLabelBlock(value) {
                       '${value['Author citation'] ?? ''} ${value['Infraspecific category'] ?? ''} ',
                   style: TextStyle(font: Font.times())),
               TextSpan(
-                  text: '${value['Epithet']} ',
+                  text: '${value['Epithet'] ?? ''} ',
                   style: TextStyle(font: Font.timesBoldItalic())),
               TextSpan(
                   text: '${value['Author']}',
@@ -312,11 +312,9 @@ Widget dataSheetItemBlock(Map value) {
                   child: leftBlock(value),
                   width: PdfPageFormat.a4.width / 3 - 45),
               Container(
-                  color: PdfColor.fromHex('#ffffff'),
-                  width: PdfPageFormat.a4.width / 3 - 25),
-              Container(
+                  padding: EdgeInsets.only(left: 18),
                   child: rightBlock(value),
-                  width: PdfPageFormat.a4.width / 3 - 45),
+                  width: (PdfPageFormat.a4.width / 3 - 45) * 2),
               Expanded(
                   child: Transform(
                       adjustLayout: true,
@@ -390,6 +388,7 @@ Widget leftBlock(Map value) {
           TextSpan(
               text: '${value['Author']}', style: TextStyle(font: Font.times())),
         ])),
+    Text('Family: ${value['Family'].toUpperCase()}'),
     Text(content2)
   ]);
 }
