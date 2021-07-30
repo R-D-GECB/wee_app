@@ -494,16 +494,6 @@ class AppDrawer extends StatelessWidget {
                 route: '/faq',
               ),
               LinkTile(
-                icon: Icons.format_list_numbered_sharp,
-                name: 'Procedure',
-                route: '/procedure',
-              ),
-              LinkTile(
-                icon: Icons.grading_rounded,
-                name: 'Herbarium',
-                route: '/herbarium',
-              ),
-              LinkTile(
                 icon: Icons.info,
                 name: 'About',
                 route: '/about',
