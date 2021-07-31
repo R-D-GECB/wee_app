@@ -196,7 +196,7 @@ class _FormViewState extends State<FormView> {
       key: _formKey,
       child: Column(
         children: [
-          CustomField(label: 'Organization', data: data, maxSize: 50),
+          CustomField(label: 'Organization', data: data, maxSize: 40),
           CustomField(
             data: data,
             label: 'Locality & Pincode',
@@ -208,8 +208,8 @@ class _FormViewState extends State<FormView> {
               date = await showDatePicker(
                   context: context,
                   initialDate: date,
-                  firstDate: date.subtract(Duration(days: 3650)),
-                  lastDate: date.add(Duration(days: 3650)),
+                  firstDate: date.subtract(Duration(days: 2 * 3650)),
+                  lastDate: date.add(Duration(days: 2 * 3650)),
                   builder: (context, child) {
                     return Theme(
                       data: ThemeData.dark().copyWith(
@@ -243,21 +243,31 @@ class _FormViewState extends State<FormView> {
           CustomField(
             label: 'Collection Number',
             data: data,
-            maxSize: 20,
+            maxSize: 15,
           ),
           CustomField(
             data: data,
             label: 'Scientific Name',
-            maxSize: 50,
+            maxSize: 40,
           ),
           CustomField(label: 'Author citation', data: data, emptyAllowed: true),
           CustomField(
-              label: 'Infraspecific category', data: data, emptyAllowed: true),
-          CustomField(label: 'Epithet', data: data, emptyAllowed: true),
+            label: 'Infraspecific category',
+            data: data,
+            emptyAllowed: true,
+            maxSize: 10,
+          ),
+          CustomField(
+            label: 'Epithet',
+            data: data,
+            emptyAllowed: true,
+            maxSize: 20,
+          ),
           CustomField(
             label: 'Author',
             data: data,
             emptyAllowed: true,
+            maxSize: 20,
           ),
           CustomField(
             data: data,
@@ -268,7 +278,7 @@ class _FormViewState extends State<FormView> {
             data: data,
             label: 'Notes \n\n',
             emptyAllowed: true,
-            maxSize: 300,
+            maxSize: 110,
             maxLines: 20,
           ),
           CustomField(
@@ -276,17 +286,22 @@ class _FormViewState extends State<FormView> {
             label: 'Collected By',
             maxSize: 30,
           ),
-          CustomField(label: 'Locality', data: data),
+          CustomField(
+            label: 'Locality',
+            data: data,
+            maxSize: 25,
+          ),
           CustomField(
             label: 'Coordinates',
             data: data,
             emptyAllowed: true,
+            maxSize: 32,
           ),
           CustomField(
             data: data,
             label: 'Description \n\n',
             emptyAllowed: true,
-            maxSize: 300,
+            maxSize: 200,
             maxLines: 20,
           ),
           CustomField(label: 'Distribution ', data: data, emptyAllowed: true),
@@ -294,6 +309,7 @@ class _FormViewState extends State<FormView> {
             label: 'Flowering & Fruiting',
             data: data,
             emptyAllowed: true,
+            maxSize: 25,
           ),
           CustomField(
             data: data,
