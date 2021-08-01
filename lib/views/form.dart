@@ -315,7 +315,7 @@ class _FormViewState extends State<FormView> {
             data: data,
             label: 'URL for Reference \n\n',
             emptyAllowed: true,
-            maxSize: 200,
+            maxSize: 100,
             maxLines: 10,
           ),
           Padding(

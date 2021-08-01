@@ -62,6 +62,7 @@ class _ProcessingViewState extends State<ProcessingView> {
             ),
             LinearProgressIndicator(
               value: complete / total,
+              color: Theme.of(context).accentColor,
               minHeight: 10,
             ),
           ])
